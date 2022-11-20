@@ -1,0 +1,48 @@
+service: opensearch-api
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: ap-northeast-1
+
+# functions
+functions:
+  indices:
+    handler: src/functions/indices.handler
+    name: get-indices
+    memorySize : 130 # mb
+    timeout: 5 # seconds
+    events: # The events that trigger this function
+      - http: 
+          path: opensearch-api/indices
+          method: GET
+
+    environment:
+      SERVICE_URI: 
+      REGION : 
+
+  search:
+    handler: src/functions/search.handler
+    name: get-search
+    memorySize : 130 # mb
+    timeout: 5 # seconds
+    events: # The events that trigger this function
+      - http: 
+          path: opensearch-api/search
+          method: GET
+    request:
+      template:
+        application/json: > 
+          {
+          "field" : "$input.params('field')",
+          "query" : "$input.params('query')"
+          }
+
+    environment:
+      SERVICE_URI: 
+      REGION : 
+
+# Serverless plugins
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
