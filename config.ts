@@ -27,7 +27,6 @@ const createAwsConnector = (credentials: Credentials, region: string) => {
 };
 
 export const client = async () => {
-    console.log(`Host name is ${host}`);
     const credentials = await defaultProvider()();
     return new Client({
         ...createAwsConnector(credentials, region),
